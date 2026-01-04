@@ -23,6 +23,10 @@ fn main()
     //turn-based loop
     loop
     {
+        //clear screen, move cursor to top-left
+        print!("\x1b[2J\x1b[H");
+        let _=std::io::stdout().flush();
+
         //print board
         draw_board(&board);
 
