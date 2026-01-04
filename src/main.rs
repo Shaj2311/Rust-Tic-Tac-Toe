@@ -44,6 +44,11 @@ fn main()
         print!("Enter position (1-9): ");
         let _=std::io::stdout().flush();
         let _=std::io::stdin().read_line(&mut pos_input);
+        if pos_input.trim() == ""
+        {
+            _game_loop_iterator-=1;
+            continue;
+        }
 
         //Get index from position
         //TEST
@@ -52,7 +57,6 @@ fn main()
         //Handle invalid positions
         if pos_int <= 0 || pos_int > 9
         {
-            println!("Invalid input!");
             _game_loop_iterator -= 1;
             continue;
         }
