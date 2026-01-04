@@ -117,6 +117,9 @@ fn main()
 
 
             }
+            //skip if game WON, not DRAWN
+            if _game_loop_iterator != 9 {continue;}
+
             //game draw
             println!("\x1b[2J\x1b[H");
             //draw final board
