@@ -13,7 +13,7 @@ use CellValue::*;
 fn main()
 {
     //full program loop
-    loop
+    'outer: loop
     {
         //take choice input
         loop
@@ -43,9 +43,6 @@ fn main()
 
         //player 1 starts
         let mut is_player1_turn = true;
-
-        //flag to check whether game was won or drawn
-        let mut game_drawn = true;
 
         //turn-based loop
         let mut _game_loop_iterator = 0;
@@ -113,10 +110,8 @@ fn main()
                 //pause
                 println!("Press Enter to Continue...");
                 let _=io::stdin().read_line(&mut String::new());
-                //mark flag
-                game_drawn = false;
                 //return to menu
-                break;
+                continue 'outer;
             }
 
             //next player's turn
@@ -124,8 +119,6 @@ fn main()
 
 
         }
-        //skip if game WON, not DRAWN
-        if !game_drawn {continue;}
 
         //game draw
         println!("\x1b[2J\x1b[H");
