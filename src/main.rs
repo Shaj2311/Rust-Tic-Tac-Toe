@@ -1,3 +1,4 @@
+use std::io;
 use std::io::Write;
 
 #[derive(PartialEq, PartialOrd)]
@@ -22,8 +23,8 @@ fn main()
 
             //take input
             let mut menu_input = String::new();
-            let _=std::io::stdout().flush();
-            let _=std::io::stdin().read_line(&mut menu_input);
+            let _=io::stdout().flush();
+            let _=io::stdin().read_line(&mut menu_input);
 
             //validate input
             let menu_int = menu_input.trim().parse().unwrap_or(0);
@@ -39,98 +40,104 @@ fn main()
             [BLANK,BLANK,BLANK],
             [BLANK,BLANK,BLANK]
         ];
-            //player 1 starts
-            let mut is_player1_turn = true;
 
-            //turn-based loop
-            let mut _game_loop_iterator = 0;
-            while _game_loop_iterator < 9
-            {
-                _game_loop_iterator+=1;
-                //clear screen, move cursor to top-left
-                println!("\x1b[2J\x1b[H");
+        //player 1 starts
+        let mut is_player1_turn = true;
 
-                //print board
-                draw_board(&board);
+        //flag to check whether game was won or drawn
+        let mut game_drawn = true;
 
-                //print message
-                println!("Player {}'s Turn",
-                    if is_player1_turn {1}
-                    else {2}
-                );
-
-
-
-                //Take position input
-                let mut pos_input = String::new();
-                print!("Enter position (1-9): ");
-                let _=std::io::stdout().flush();
-                let _=std::io::stdin().read_line(&mut pos_input);
-                if pos_input.trim() == ""
-                {
-                    _game_loop_iterator-=1;
-                    continue;
-                }
-
-                //Get index from position
-                let pos_int: i32 = pos_input.trim().parse().unwrap_or(0);
-
-                //Handle invalid positions
-                if pos_int <= 0 || pos_int > 9
-                {
-                    _game_loop_iterator -= 1;
-                    continue;
-                }
-
-                //get row and column index
-                let row_index= ((pos_int-1) / 3) as usize;
-                let col_index = ((pos_int-1) % 3) as usize;
-
-                //mark cell
-                if board[row_index][col_index] == BLANK
-                {
-                    board[row_index][col_index] = if is_player1_turn {PLAYER1} else {PLAYER2};
-                }
-                else
-                {
-                    _game_loop_iterator -= 1;
-                    continue;
-                }
-
-                //check win
-                if player_wins(is_player1_turn, &board)
-                {
-                    println!("\x1b[2J\x1b[H");
-                    //draw final board
-                    draw_board(&board);
-                    //print win message
-                    println!("Player {} wins!", if is_player1_turn {1} else {2});
-                    //pause
-                    println!("Press Enter to Continue...");
-                    let _=std::io::stdin().read_line(&mut String::new());
-                    //return to menu
-                    break;
-                }
-
-                //next player's turn
-                is_player1_turn = !is_player1_turn;
-
-
-            }
-            //skip if game WON, not DRAWN
-            if _game_loop_iterator != 9 {continue;}
-
-            //game draw
+        //turn-based loop
+        let mut _game_loop_iterator = 0;
+        while _game_loop_iterator < 9
+        {
+            _game_loop_iterator+=1;
+            //clear screen, move cursor to top-left
             println!("\x1b[2J\x1b[H");
-            //draw final board
+
+            //print board
             draw_board(&board);
-            //print draw message
-            println!("Draw!");
-            //pause
-            println!("Press Enter to Continue...");
-            let _=std::io::stdin().read_line(&mut String::new());
-            //return to menu
-            continue;
+
+            //print message
+            println!("Player {}'s Turn",
+                if is_player1_turn {1}
+                else {2}
+            );
+
+
+
+            //Take position input
+            let mut pos_input = String::new();
+            print!("Enter position (1-9): ");
+            let _=io::stdout().flush();
+            let _=io::stdin().read_line(&mut pos_input);
+            if pos_input.trim() == ""
+            {
+                _game_loop_iterator-=1;
+                continue;
+            }
+
+            //Get index from position
+            let pos_int: i32 = pos_input.trim().parse().unwrap_or(0);
+
+            //Handle invalid positions
+            if pos_int <= 0 || pos_int > 9
+            {
+                _game_loop_iterator -= 1;
+                continue;
+            }
+
+            //get row and column index
+            let row_index= ((pos_int-1) / 3) as usize;
+            let col_index = ((pos_int-1) % 3) as usize;
+
+            //mark cell
+            if board[row_index][col_index] == BLANK
+            {
+                board[row_index][col_index] = if is_player1_turn {PLAYER1} else {PLAYER2};
+            }
+            else
+            {
+                _game_loop_iterator -= 1;
+                continue;
+            }
+
+            //check win
+            if player_wins(is_player1_turn, &board)
+            {
+                println!("\x1b[2J\x1b[H");
+                //draw final board
+                draw_board(&board);
+                //print win message
+                println!("Player {} wins!", if is_player1_turn {1} else {2});
+                //pause
+                println!("Press Enter to Continue...");
+                let _=io::stdin().read_line(&mut String::new());
+                //mark flag
+                game_drawn = false;
+                //return to menu
+                break;
+            }
+
+            //next player's turn
+            is_player1_turn = !is_player1_turn;
+
+
+        }
+        //skip if game WON, not DRAWN
+        if !game_drawn {continue;}
+
+        //game draw
+        println!("\x1b[2J\x1b[H");
+        //draw final board
+        draw_board(&board);
+        //print draw message
+        println!("Draw!");
+        //pause
+        println!("Press Enter to Continue...");
+        let _=io::stdin().read_line(&mut String::new());
+        //return to menu
+        continue;
 
     }
 }
@@ -161,7 +168,7 @@ fn draw_board(board: &[[CellValue;3];3])
         for j in 0..3
         {
             print!("{}|",
-                 if board[i][j] == PLAYER1 {'O'}
+                if board[i][j] == PLAYER1 {'O'}
                 else if board[i][j] == PLAYER2 {'X'}
                 else {' '}
             );
@@ -184,25 +191,25 @@ fn player_wins(p1_turn: bool, board: &[[CellValue;3];3]) -> bool
         else {PLAYER2};
 
     for i in 0..3
-    {
-        //check horizontal lines
-        if board[0][i] == target_cell_value && 
-            board[1][i] == target_cell_value && 
-                board[2][i] == target_cell_value
         {
-            return true;
+            //check horizontal lines
+            if board[0][i] == target_cell_value && 
+                board[1][i] == target_cell_value && 
+                    board[2][i] == target_cell_value
+            {
+                return true;
+            }
+
+
+            //check vertical lines
+            if board[i][0] == target_cell_value && 
+                board[i][1] == target_cell_value && 
+                    board[i][2] == target_cell_value
+            {
+                return true;
+            }
+
         }
-
-
-        //check vertical lines
-        if board[i][0] == target_cell_value && 
-            board[i][1] == target_cell_value && 
-                board[i][2] == target_cell_value
-        {
-            return true;
-        }
-
-    }
 
     //check diagonals
     if board[0][0] == target_cell_value && 
