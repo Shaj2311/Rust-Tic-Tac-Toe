@@ -21,8 +21,10 @@ fn main()
     let mut is_player1_turn = true;
 
     //turn-based loop
-    loop
+    let mut _game_loop_iterator = 0;
+    while _game_loop_iterator < 9
     {
+        _game_loop_iterator+=1;
         //clear screen, move cursor to top-left
         println!("\x1b[2J\x1b[H");
 
@@ -51,6 +53,7 @@ fn main()
         if pos_int <= 0 || pos_int > 9
         {
             println!("Invalid input!");
+            _game_loop_iterator -= 1;
             continue;
         }
 
@@ -65,6 +68,7 @@ fn main()
         }
         else
         {
+            _game_loop_iterator -= 1;
             continue;
         }
         
@@ -74,7 +78,7 @@ fn main()
             println!("\x1b[2J\x1b[H");
             draw_board(&board);
             println!("Player {} wins!", if is_player1_turn {1} else {2});
-            break;
+            std::process::exit(0);
         }
 
         //next player's turn
@@ -82,6 +86,10 @@ fn main()
         
 
     }
+    //game draw
+    println!("\x1b[2J\x1b[H");
+    draw_board(&board);
+    println!("Draw!");
 }
 
 //print board
