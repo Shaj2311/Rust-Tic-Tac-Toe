@@ -51,8 +51,7 @@ fn main()
         }
 
         //Get index from position
-        //TEST
-        let pos_int: i32 = pos_input.trim().parse().expect("Invalid Cell Value Input");
+        let pos_int: i32 = pos_input.trim().parse().unwrap_or(0);
 
         //Handle invalid positions
         if pos_int <= 0 || pos_int > 9
