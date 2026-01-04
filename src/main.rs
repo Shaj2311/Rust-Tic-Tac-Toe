@@ -24,8 +24,7 @@ fn main()
     loop
     {
         //clear screen, move cursor to top-left
-        print!("\x1b[2J\x1b[H");
-        let _=std::io::stdout().flush();
+        println!("\x1b[2J\x1b[H");
 
         //print board
         draw_board(&board);
@@ -72,7 +71,10 @@ fn main()
         //check win
         if player_wins(is_player1_turn, &board)
         {
-            println!("Yay");
+            println!("\x1b[2J\x1b[H");
+            draw_board(&board);
+            println!("Player {} wins!", if is_player1_turn {1} else {2});
+            break;
         }
 
         //next player's turn
