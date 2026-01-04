@@ -52,17 +52,15 @@ fn main()
         }
 
         //get row and column index
-        let row_index:i32 = (pos_int-1) / 3;
-        let col_index:i32 = (pos_int-1) % 3;
+        let row_index= ((pos_int-1) / 3) as usize;
+        let col_index = ((pos_int-1) % 3) as usize;
 
-        //debug
-        println!("Row: {row_index}\n Column: {col_index}\n");
-
+        //mark cell
+        board[row_index][col_index] = if is_player1_turn {PLAYER1} else {PLAYER2};
+        
         //next player's turn
         is_player1_turn = !is_player1_turn;
         
-
-
 
     }
 }
