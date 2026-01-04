@@ -42,7 +42,7 @@ fn main()
 
         //Get index from position
         //TEST
-        let pos_int: i32 = pos_input.trim().parse().expect("Invalid bruh");
+        let pos_int: i32 = pos_input.trim().parse().expect("Invalid Cell Value Input");
 
         //Handle invalid positions
         if pos_int <= 0 || pos_int > 9
@@ -56,8 +56,21 @@ fn main()
         let col_index = ((pos_int-1) % 3) as usize;
 
         //mark cell
-        board[row_index][col_index] = if is_player1_turn {PLAYER1} else {PLAYER2};
+        if board[row_index][col_index] == BLANK
+        {
+            board[row_index][col_index] = if is_player1_turn {PLAYER1} else {PLAYER2};
+        }
+        else
+        {
+            continue;
+        }
         
+        //check win
+        if player_wins(is_player1_turn, &board)
+        {
+            println!("Yay");
+        }
+
         //next player's turn
         is_player1_turn = !is_player1_turn;
         
@@ -96,4 +109,49 @@ fn draw_board(board: &[[CellValue;3];3])
         println!("");
 
     }
+}
+
+fn player_wins(p1_turn: bool, board: &[[CellValue;3];3]) -> bool
+{
+    let target_cell_value: CellValue = 
+        if p1_turn {PLAYER1}
+        else {PLAYER2};
+
+    for i in 0..3
+    {
+        //check horizontal lines
+        if board[0][i] == target_cell_value && 
+            board[1][i] == target_cell_value && 
+                board[2][i] == target_cell_value
+        {
+            return true;
+        }
+
+
+        //check vertical lines
+        if board[i][0] == target_cell_value && 
+            board[i][1] == target_cell_value && 
+                board[i][2] == target_cell_value
+        {
+            return true;
+        }
+
+    }
+
+    //check diagonals
+    if board[0][0] == target_cell_value && 
+        board[1][1] == target_cell_value && 
+            board[2][2] == target_cell_value
+    {
+        return true;
+    }
+
+    if board[0][2] == target_cell_value && 
+        board[1][1] == target_cell_value && 
+            board[2][0] == target_cell_value
+    {
+        return true;
+    }
+
+    return false;
 }
