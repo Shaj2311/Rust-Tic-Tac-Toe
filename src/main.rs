@@ -80,9 +80,6 @@ fn main()
                     //print board
                     draw_board(&board);
 
-                    //DEBUG
-                    println!("Current state: {:?}", game_state);
-
                     //print message
                     println!("Player {}'s Turn",
                         if is_player1_turn {1}
@@ -182,9 +179,6 @@ fn main()
             }
         }
 
-
-
-
     }
 }
 
@@ -279,30 +273,24 @@ fn switch_to_state(curr_state: &mut State, new_state: State)
 {
     //update state
     *curr_state = new_state;
-    println!("Switching to state {:?}", curr_state);
-    let _=io::stdout().flush();
-    let _=io::stdin().read_line(&mut String::new());
+
+    //This will contain one-time upon-switching functionalities
     match curr_state
     {
         State::MENU =>
         {
-
         }
         State::PLAY =>
         {
-
         }
         State::WIN =>
         {
-
         }
         State::DRAW =>
         {
-
         }
         State::EXIT =>
         {
-
         }
     }
 }
