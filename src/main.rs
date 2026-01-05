@@ -69,6 +69,16 @@ fn main()
             }
             State::PLAY =>
             {
+                //reset board
+                board = [
+                    [BLANK, BLANK, BLANK],
+                    [BLANK, BLANK, BLANK],
+                    [BLANK, BLANK, BLANK]
+                ];
+
+                //player 1 starts
+                is_player1_turn = true;
+
                 //turn-based loop
                 let mut _game_loop_iterator = 0;
                 while _game_loop_iterator < 9
